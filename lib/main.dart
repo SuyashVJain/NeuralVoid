@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
+
 import 'core/theme/app_theme.dart';
 import 'features/onboarding/onboarding_screen.dart';
+import 'progress/controllers/progress_controller.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  await Hive.openBox('progressBox');
+
   runApp(const NeuralLearnApp());
 }
 
@@ -11,11 +20,18 @@ class NeuralLearnApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'NeuralLearn',
-      theme: AppTheme.lightTheme,
-      home: const OnboardingScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ProgressController()..loadProgress(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'NeuralLearn',
+        theme: AppTheme.lightTheme,
+        home: const OnboardingScreen(),
+      ),
     );
   }
 }
