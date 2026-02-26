@@ -1,0 +1,23 @@
+{
+  "@@locale": "hi",
+  "appTitle": "न्यूरल-लर्न",
+  "welcomeTitle": "न्यूरल-लर्न में आपका स्वागत है",
+  "studentName": "छात्र का नाम",
+  "selectClass": "कक्षा चुनें",
+  "continueButton": "जारी रखें",
+  "aiTutor": "AI शिक्षक",
+  "general": "सामान्य",
+  "mathematics": "गणित",
+  "science": "विज्ञान",
+  "socialScience": "सामाजिक विज्ञान",
+  "concise": "संक्षिप्त",
+  "detailed": "विस्तृत",
+  "askDoubt": "अपना सवाल पूछें...",
+  "ncertBooks": "NCERT पुस्तकें",
+  "math": "गणित",
+  "socialStudies": "सामाजिक विज्ञान",
+  "english": "अंग्रेज़ी",
+  "hindi": "हिंदी",
+  "settings": "सेटिंग्स",
+  "language": "भाषा"
+}

@@ -1,3 +1,4 @@
+// lib/models/ai_response_model.dart
 class AIResponse {
   final String subject;
   final String concise;

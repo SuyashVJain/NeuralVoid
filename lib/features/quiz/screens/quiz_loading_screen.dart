@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class QuizLoadingScreen extends StatefulWidget {
-  final Future<void> onComplete;
-
-  const QuizLoadingScreen({super.key, required this.onComplete});
+  const QuizLoadingScreen({super.key});
 
   @override
   State<QuizLoadingScreen> createState() =>
@@ -11,51 +9,62 @@ class QuizLoadingScreen extends StatefulWidget {
 }
 
 class _QuizLoadingScreenState
-    extends State<QuizLoadingScreen> {
-  double progress = 0;
+    extends State<QuizLoadingScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    simulateLoading();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(
+      begin: 0.8,
+      end: 1.1,
+    ).animate(_controller);
   }
 
-  void simulateLoading() async {
-    for (int i = 0; i <= 100; i++) {
-      await Future.delayed(
-          const Duration(milliseconds: 20));
-      setState(() {
-        progress = i / 100;
-      });
-    }
-
-    await widget.onComplete();
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(24),
+      body: Center(
         child: Column(
           mainAxisAlignment:
               MainAxisAlignment.center,
           children: [
+            ScaleTransition(
+              scale: _animation,
+              child: Icon(
+                Icons.auto_awesome,
+                size: 60,
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary,
+              ),
+            ),
+            const SizedBox(height: 20),
             const Text(
-              "Generating Your AI Quiz",
+              "Generating Your AI Quiz...",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 30),
-            LinearProgressIndicator(
-              value: progress,
-              minHeight: 10,
-            ),
             const SizedBox(height: 10),
-            Text(
-              "${(progress * 100).toInt()}%",
+            const Text(
+              "Analyzing chapter concepts...",
+              style: TextStyle(fontSize: 14),
             ),
           ],
         ),
