@@ -27,23 +27,25 @@ class _QuizScreenState extends State<QuizScreen> {
   int score = 0;
 
   void submitAnswer() {
-    if (selectedIndex == null) return;
+    if (selectedIndex == null || isSubmitted) return;
 
-    setState(() {
-      isSubmitted = true;
-    });
-
-    bool isCorrect =
+    final bool isCorrect =
         selectedIndex == widget.questions[currentIndex].correctIndex;
 
-    if (isCorrect) score++;
+    if (isCorrect) {
+      score++;
+    }
 
-    Provider.of<ProgressController>(context, listen: false)
-        .updateQuiz(
+    // Track per-question performance
+    Provider.of<ProgressController>(context, listen: false).updateQuiz(
       subject: widget.subject,
       chapter: widget.chapter,
       isCorrect: isCorrect,
     );
+
+    setState(() {
+      isSubmitted = true;
+    });
   }
 
   void nextQuestion() {
@@ -54,10 +56,13 @@ class _QuizScreenState extends State<QuizScreen> {
         isSubmitted = false;
       });
     } else {
+      // Navigate to result screen with required parameters
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (_) => QuizResultScreen(
+            subject: widget.subject,
+            chapter: widget.chapter,
             score: score,
             total: widget.questions.length,
           ),
@@ -73,20 +78,21 @@ class _QuizScreenState extends State<QuizScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "Question ${currentIndex + 1}/${widget.questions.length}"),
+          "Question ${currentIndex + 1}/${widget.questions.length}",
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-
+            // =========================
             // Question Card
+            // =========================
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .colorScheme
-                    .primaryContainer,
+                color: Theme.of(context).colorScheme.primaryContainer,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
@@ -100,7 +106,9 @@ class _QuizScreenState extends State<QuizScreen> {
 
             const SizedBox(height: 20),
 
+            // =========================
             // Options
+            // =========================
             ...List.generate(question.options.length, (index) {
               Color bgColor = Colors.grey.shade100;
 
@@ -111,9 +119,8 @@ class _QuizScreenState extends State<QuizScreen> {
                   bgColor = Colors.red.shade100;
                 }
               } else if (selectedIndex == index) {
-                bgColor = Theme.of(context)
-                    .colorScheme
-                    .secondaryContainer;
+                bgColor =
+                    Theme.of(context).colorScheme.secondaryContainer;
               }
 
               return GestureDetector(
@@ -132,14 +139,18 @@ class _QuizScreenState extends State<QuizScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "${String.fromCharCode(65 + index)}. ",
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Expanded(
-                        child: Text(question.options[index]),
+                        child: Text(
+                          question.options[index],
+                        ),
                       ),
                     ],
                   ),
@@ -147,48 +158,49 @@ class _QuizScreenState extends State<QuizScreen> {
               );
             }),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
-            // Explanation
+            // =========================
+            // Explanation Section
+            // =========================
             if (isSubmitted)
               Container(
-                padding: const EdgeInsets.all(12),
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: Colors.blue.shade50,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  "Explanation: ${question.explanation}",
-                  style: const TextStyle(fontSize: 14),
+                  "Explanation:\n${question.explanation}",
+                  style: const TextStyle(
+                    fontSize: 14,
+                    height: 1.4,
+                  ),
                 ),
               ),
 
             const Spacer(),
 
-            // Buttons
-            if (!isSubmitted)
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: selectedIndex == null
-                      ? null
-                      : submitAnswer,
-                  child: const Text("Submit Answer"),
-                ),
-              )
-            else
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: nextQuestion,
-                  child: Text(
-                    currentIndex ==
-                            widget.questions.length - 1
-                        ? "Finish Quiz"
-                        : "Next Question",
-                  ),
+            // =========================
+            // Action Button
+            // =========================
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: !isSubmitted
+                    ? (selectedIndex == null ? null : submitAnswer)
+                    : nextQuestion,
+                child: Text(
+                  !isSubmitted
+                      ? "Submit Answer"
+                      : currentIndex ==
+                              widget.questions.length - 1
+                          ? "Finish Quiz"
+                          : "Next Question",
                 ),
               ),
+            ),
           ],
         ),
       ),

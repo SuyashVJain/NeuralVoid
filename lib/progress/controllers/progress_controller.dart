@@ -13,8 +13,12 @@ class ProgressController extends ChangeNotifier {
 
   void loadProgress() {
     final data = _service.getAllChapters();
-    chapters =
-        data.map((e) => ChapterProgress.fromMap(e)).toList();
+
+    chapters = data.map((e) {
+      final converted = Map<String, dynamic>.from(e);
+      return ChapterProgress.fromMap(converted);
+    }).toList();
+
     notifyListeners();
   }
 
@@ -31,9 +35,18 @@ class ProgressController extends ChangeNotifier {
 
     var existing = _service.getChapter(key);
 
-    ChapterProgress progress = existing == null
-        ? ChapterProgress(subject: subject, chapter: chapter)
-        : ChapterProgress.fromMap(existing);
+    ChapterProgress progress;
+
+    if (existing == null) {
+      progress = ChapterProgress(
+        subject: subject,
+        chapter: chapter,
+      );
+    } else {
+      progress = ChapterProgress.fromMap(
+        Map<String, dynamic>.from(existing),
+      );
+    }
 
     progress.quizAttempts++;
     if (isCorrect) {
@@ -47,7 +60,7 @@ class ProgressController extends ChangeNotifier {
   }
 
   // ==========================================================
-  // COMPLETE QUIZ (NEW PROFESSIONAL METHOD)
+  // COMPLETE QUIZ
   // ==========================================================
 
   void completeQuiz({
@@ -60,18 +73,23 @@ class ProgressController extends ChangeNotifier {
 
     var existing = _service.getChapter(key);
 
-    ChapterProgress progress = existing == null
-        ? ChapterProgress(subject: subject, chapter: chapter)
-        : ChapterProgress.fromMap(existing);
+    ChapterProgress progress;
+
+    if (existing == null) {
+      progress = ChapterProgress(
+        subject: subject,
+        chapter: chapter,
+      );
+    } else {
+      progress = ChapterProgress.fromMap(
+        Map<String, dynamic>.from(existing),
+      );
+    }
 
     double percentage = (score / total) * 100;
 
-    // Store last quiz result
     progress.lastScore = percentage;
-
-    // Increase total quiz sessions
     progress.totalQuizSessions++;
-
     progress.lastStudied = DateTime.now();
 
     _service.saveChapter(key, progress.toMap());
@@ -90,9 +108,18 @@ class ProgressController extends ChangeNotifier {
 
     var existing = _service.getChapter(key);
 
-    ChapterProgress progress = existing == null
-        ? ChapterProgress(subject: subject, chapter: chapter)
-        : ChapterProgress.fromMap(existing);
+    ChapterProgress progress;
+
+    if (existing == null) {
+      progress = ChapterProgress(
+        subject: subject,
+        chapter: chapter,
+      );
+    } else {
+      progress = ChapterProgress.fromMap(
+        Map<String, dynamic>.from(existing),
+      );
+    }
 
     progress.doubtsAsked++;
     progress.lastStudied = DateTime.now();
@@ -150,7 +177,7 @@ class ProgressController extends ChangeNotifier {
   }
 
   // ==========================================================
-  // MASTERY LEVEL (AI STYLE)
+  // MASTERY LEVEL
   // ==========================================================
 
   String getMasteryLevel(String subject, String chapter) {

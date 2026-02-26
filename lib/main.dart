@@ -10,6 +10,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
+
+  // 🔥 TEMP: Reset corrupted Hive data (run once)
+  if (await Hive.boxExists('progressBox')) {
+    await Hive.deleteBoxFromDisk('progressBox');
+  }
+
   await Hive.openBox('progressBox');
 
   runApp(const NeuralLearnApp());
@@ -23,7 +29,11 @@ class NeuralLearnApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ProgressController()..loadProgress(),
+          create: (_) {
+            final controller = ProgressController();
+            controller.loadProgress();
+            return controller;
+          },
         ),
       ],
       child: MaterialApp(
