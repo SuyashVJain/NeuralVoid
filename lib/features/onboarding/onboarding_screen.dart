@@ -1,6 +1,7 @@
 // lib/features/onboarding/onboarding_screen.dart
 import 'package:flutter/material.dart';
-
+import '../../models/student_model.dart';
+import '../ai_tutor/ai_tutor_screen.dart';
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -62,10 +63,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // For now just print
-                  print("Name: ${_nameController.text}");
-                },
+onPressed: () {
+  if (_nameController.text.isEmpty) return;
+
+  final student = Student(
+    name: _nameController.text.trim(),
+    studentClass: selectedClass,
+  );
+
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (context) => AITutorScreen(student: student),
+    ),
+  );
+},
                 child: const Text("Continue"),
               ),
             ),
