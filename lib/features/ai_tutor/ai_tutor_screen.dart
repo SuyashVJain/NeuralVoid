@@ -1,5 +1,7 @@
+// lib/features/ai_tutor/ai_tutor_screen.dart
 import 'package:flutter/material.dart';
 import '../../models/student_model.dart';
+import '../../services/ai_router_service.dart';
 
 class AITutorScreen extends StatefulWidget {
   final Student student;
@@ -16,26 +18,35 @@ class _AITutorScreenState extends State<AITutorScreen> {
 
   final List<Map<String, String>> messages = [];
 
+  bool isConciseMode = true;
+
   void sendMessage() {
     final text = _messageController.text.trim();
     if (text.isEmpty) return;
 
+    final aiResponse = AIRouterService.generateResponse(text);
+
     setState(() {
       messages.add({"role": "user", "content": text});
+
       messages.add({
         "role": "ai",
-        "content": "This is a placeholder AI response for now."
+        "content": isConciseMode
+            ? aiResponse.concise
+            : aiResponse.detailed,
       });
     });
 
     _messageController.clear();
 
     Future.delayed(const Duration(milliseconds: 100), () {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
     });
   }
 
@@ -48,7 +59,36 @@ class _AITutorScreenState extends State<AITutorScreen> {
       ),
       body: Column(
         children: [
-          // Chat Messages
+          // ===== Toggle Section =====
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ChoiceChip(
+                  label: const Text("Concise"),
+                  selected: isConciseMode,
+                  onSelected: (_) {
+                    setState(() {
+                      isConciseMode = true;
+                    });
+                  },
+                ),
+                const SizedBox(width: 10),
+                ChoiceChip(
+                  label: const Text("Detailed"),
+                  selected: !isConciseMode,
+                  onSelected: (_) {
+                    setState(() {
+                      isConciseMode = false;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+
+          // ===== Chat Messages =====
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
@@ -83,7 +123,7 @@ class _AITutorScreenState extends State<AITutorScreen> {
             ),
           ),
 
-          // Input Bar (Fixed with SafeArea)
+          // ===== Input Bar =====
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
@@ -95,6 +135,7 @@ class _AITutorScreenState extends State<AITutorScreen> {
                       decoration: const InputDecoration(
                         hintText: "Ask your doubt...",
                       ),
+                      onSubmitted: (_) => sendMessage(),
                     ),
                   ),
                   const SizedBox(width: 10),
