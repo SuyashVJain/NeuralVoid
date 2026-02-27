@@ -21,7 +21,8 @@ dependencies:
   hive_flutter: ^1.1.0
   path_provider: ^2.1.2
   fl_chart: ^0.66.0
-
+  http: ^1.2.1  
+  flutter_markdown: ^0.7.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
