@@ -12,6 +12,7 @@ import 'package:neural_learn/progress/controllers/progress_controller.dart';
 import 'package:neural_learn/progress/screens/progress_dashboard_screen.dart';
 import 'package:neural_learn/features/quiz/models/quiz_question.dart';
 import 'package:neural_learn/features/quiz/screens/quiz_screen.dart';
+import 'package:neural_learn/core/providers/locale_provider.dart';
 
 class AITutorScreen extends StatefulWidget {
   final Student student;
@@ -68,8 +69,10 @@ class _AITutorScreenState extends State<AITutorScreen> {
 
     final buffer = StringBuffer();
 
-    await for (final chunk in AIRouterService.askStream(text, concise: isConciseMode)) {
-      buffer.write(chunk);
+final locale = Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+final language = locale == 'hi' ? 'Hindi' : 'English';
+
+await for (final chunk in AIRouterService.askStream(text, concise: isConciseMode, language: language)) {      buffer.write(chunk);
       if (mounted) {
         setState(() {
           messages[_streamingIndex!] =

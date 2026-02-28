@@ -1,6 +1,7 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gemma/flutter_gemma.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:neural_learn/l10n/app_localizations.dart';
@@ -11,6 +12,10 @@ import 'package:neural_learn/progress/controllers/progress_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize FlutterGemma FIRST
+  FlutterGemma.initialize();
+
   await Hive.initFlutter();
 
   // 🔥 TEMP: Reset corrupted Hive data (run once)
