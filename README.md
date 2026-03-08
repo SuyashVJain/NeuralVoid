@@ -170,14 +170,13 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 ## 👤 Author
 
-**Suyash V. Jain**
-- GitHub: [@SuyashVJain](https://github.com/SuyashVJain)
-**Prashasti Verma**
-- GitHub: [@SuyashVJain](https://github.com/prashastiverma)
-**Sandarbh Bhasin**
-- GitHub: [@SuyashVJain](https://github.com/sandarbhbhasin)
-**Medhanash Rathod**
-- GitHub: [@SuyashVJain](https://github.com/medhanashrathod)
+**Suyash V. Jain** - [@SuyashVJain](https://github.com/SuyashVJain)
+
+**Prashasti Verma** - [@prashastiverma](https://github.com/prashastiverma)
+
+**Sandarbh Bhasin** - [@sandarbhbhasin](https://github.com/sandarbhbhasin)
+
+**Medhanash Rathod** - [@medhanashrathod](https://github.com/medhanashrathod)
 
 ---
 
