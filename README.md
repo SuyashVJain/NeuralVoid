@@ -174,7 +174,7 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 **Prashasti Verma** - [@prashastiverma](https://github.com/prashastiverma)
 
-**Sandarbh Bhasin** - [@sandarbhbhasin](https://github.com/sandarbhbhasin)
+**Sandarbh Bhasin** - [@codesandstorm](https://github.com/codesandstorm)
 
 **Medhanash Rathod** - [@medhanashrathod](https://github.com/medhanashrathod)
 
