@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.neural_learn"
+    namespace = "com.neuralvoid.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -19,7 +19,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.neural_learn"
+        applicationId = "com.neuralvoid.app"
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

@@ -36,6 +36,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/model/gemma3-1B-it-int4.task
+    - assets/rag/chunks.json
+    - assets/rag/embeddings.json
     - assets/books/10/english/
     - assets/books/10/hindi/
     - assets/books/10/math/

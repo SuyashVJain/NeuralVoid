@@ -17,11 +17,6 @@ Future<void> main() async {
   FlutterGemma.initialize();
 
   await Hive.initFlutter();
-
-  // 🔥 TEMP: Reset corrupted Hive data (run once)
-  if (await Hive.boxExists('progressBox')) {
-    await Hive.deleteBoxFromDisk('progressBox');
-  }
   await Hive.openBox('progressBox');
 
   runApp(

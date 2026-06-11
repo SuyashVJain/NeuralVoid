@@ -43,5 +43,16 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/build/
 
 .fake
+
+# Local scratch files
+struct.txt
+offlinerag.txt
+
+# Large binaries / external project not part of the app
+OfflineRag/
+OfflineRag/venv/
+assets/model/
+android/app/src/main/assets/*.task

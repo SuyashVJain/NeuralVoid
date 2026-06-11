@@ -64,7 +64,7 @@ class _AITutorScreenState extends State<AITutorScreen> {
 
     Provider.of<ProgressController>(context, listen: false).updateDoubt(
       subject: currentSubjectKey,
-      chapter: 'General',
+      chapter: currentSubjectKey,
     );
 
     final buffer = StringBuffer();
